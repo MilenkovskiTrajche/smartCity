@@ -9,7 +9,7 @@ public class AiWebClientConfig {
     @Bean
     public WebClient aiWebClient() {
         return WebClient.builder()
-                .baseUrl("http://localhost:8000") // Python AI service
+                .baseUrl(System.getenv("AI_BASE_URL"))
                 .build();
     }
 }
