@@ -1,10 +1,15 @@
 package com.example.smartcity.report.service;
 
+import com.example.smartcity.ai.dto.AiResponseDto;
 import com.example.smartcity.ai.service.AiService;
+import com.example.smartcity.report.dto.ReportCreateDto;
 import com.example.smartcity.report.model.Report;
 import com.example.smartcity.report.repository.ReportRepository;
 import org.springframework.stereotype.Service;
 
+/**
+ * Business logic for managing reports.
+ */
 @Service
 public class ReportService {
 
@@ -17,14 +22,16 @@ public class ReportService {
     }
 
     /**
-     * Creates report and classifies it using AI
+     * Creates report and enriches it using AI classification.
      */
-    public Report createReport(String description) {
-        String category = aiService.classifyReport(description);
+    public Report create(ReportCreateDto dto) {
+
+        AiResponseDto aiResponse = aiService.classify(dto.getDescription());
 
         Report report = new Report();
-        report.setDescription(description);
-        report.setCategory(category);
+        report.setDescription(dto.getDescription());
+        report.setCategory(aiResponse.getCategory());
+        report.setStatus("OPEN");
 
         return repository.save(report);
     }

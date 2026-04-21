@@ -1,8 +1,13 @@
 package com.example.smartcity.client.ai;
 
+import com.example.smartcity.ai.dto.AiRequestDto;
+import com.example.smartcity.ai.dto.AiResponseDto;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+/**
+ * Responsible for communication with external AI service (Python).
+ */
 @Component
 public class AiClient {
 
@@ -13,15 +18,14 @@ public class AiClient {
     }
 
     /**
-     * Calls external AI service (Python)
-     * Sends image/text and receives classification
+     * Calls AI service endpoint.
      */
-    public String classify(String input) {
+    public AiResponseDto classify(AiRequestDto request) {
         return webClient.post()
                 .uri("/classify")
-                .bodyValue(input)
+                .bodyValue(request)
                 .retrieve()
-                .bodyToMono(String.class)
+                .bodyToMono(AiResponseDto.class)
                 .block();
     }
 }
