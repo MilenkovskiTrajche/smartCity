@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 /**
  * REST endpoints for reports.
@@ -26,7 +27,7 @@ public class ReportController {
      * Create new report
      */
     @PostMapping
-    public ReportResponseDto create(@RequestBody ReportCreateDto dto) {
+    public ReportResponseDto create(@Valid @RequestBody ReportCreateDto dto) {
         return ReportMapper.toDto(service.create(dto));
     }
 }

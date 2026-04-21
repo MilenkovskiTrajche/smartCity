@@ -1,5 +1,6 @@
 package com.example.smartcity.report.model;
 
+import com.example.smartcity.report.model.enums.ReportStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,7 +19,10 @@ public class Report {
 
     private String category; // classified by AI
 
-    private String status; // TODO: OPEN, IN_PROGRESS, RESOLVED
+    @Enumerated(EnumType.STRING)
+    private ReportStatus status;
+
+    private String institutionName;
 
     // TODO:
     // - location (lat, lng)

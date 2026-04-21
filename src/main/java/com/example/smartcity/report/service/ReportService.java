@@ -2,9 +2,11 @@ package com.example.smartcity.report.service;
 
 import com.example.smartcity.ai.dto.AiResponseDto;
 import com.example.smartcity.ai.service.AiService;
-import com.example.smartcity.client.institution.InstitutionClient;
+import com.example.smartcity.institution.model.Institution;
+import com.example.smartcity.institution.service.InstitutionService;
 import com.example.smartcity.report.dto.ReportCreateDto;
 import com.example.smartcity.report.model.Report;
+import com.example.smartcity.report.model.enums.ReportStatus;
 import com.example.smartcity.report.repository.ReportRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,32 +18,38 @@ public class ReportService {
 
     private final ReportRepository repository;
     private final AiService aiService;
-    private final InstitutionClient institutionClient;
+    private final InstitutionService institutionService;
 
     public ReportService(ReportRepository repository,
                          AiService aiService,
-                         InstitutionClient institutionClient) {
+                         InstitutionService institutionService) {
         this.repository = repository;
         this.aiService = aiService;
-        this.institutionClient = institutionClient;
+        this.institutionService = institutionService;
     }
 
     /**
-     * Creates report and enriches it using AI classification.
+     * Creates report, classifies it, and assigns institution.
      */
     public Report create(ReportCreateDto dto) {
 
+        // 1. AI classification
         AiResponseDto aiResponse = aiService.classify(dto.getDescription());
 
+        // 2. Find institution
+        Institution institution =
+                institutionService.findByCategory(aiResponse.getCategory());
+
+        // 3. Create report
         Report report = new Report();
         report.setDescription(dto.getDescription());
         report.setCategory(aiResponse.getCategory());
-        report.setStatus("OPEN");
+        report.setStatus(ReportStatus.ASSIGNED);
 
-        institutionClient.sendReport(
-                report.getCategory(),
-                report.getDescription()
-        );
+        if (institution != null) {
+            report.setInstitutionName(institution.name());
+        }
+
         return repository.save(report);
     }
 }
