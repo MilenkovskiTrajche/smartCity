@@ -1,20 +1,13 @@
 package com.example.smartcity.ai.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
- * Request sent to AI service.
- * Can be extended later with:
- * - image (base64 or URL)
- * - location
+ * Request sent to AI analysis service.
  */
-@Setter
-@Getter
-public class AiRequestDto {
+public record AiRequestDto(
 
-    private String description;
+        String description,
 
-    // TODO: add image field (Multipart or base64)
+        String imagePath
 
+) {
 }

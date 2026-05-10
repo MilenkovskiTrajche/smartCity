@@ -1,18 +1,21 @@
 package com.example.smartcity.ai.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
- * Response received from AI service.
- * Represents classification result.
+ * AI analysis result.
  */
-@Setter
-@Getter
-public class AiResponseDto {
+public record AiResponseDto(
 
-    private String category;
+        String category,
 
-    private Double confidence; // optional
+        String summary,
 
+        String priority,
+
+        String institutionCategory,
+
+        Double confidence,
+
+        Boolean categoryMatch
+
+) {
 }

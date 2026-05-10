@@ -1,6 +1,7 @@
 package com.example.smartcity.report.model;
 
 import com.example.smartcity.institution.model.Institution;
+import com.example.smartcity.report.model.enums.ReportPriority;
 import com.example.smartcity.report.model.enums.ReportStatus;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -23,9 +24,18 @@ public class Report {
     @Enumerated(EnumType.STRING)
     private ReportStatus status;
 
+    @Enumerated(EnumType.STRING)
+    private ReportPriority priority;
+
     @ManyToOne
     @JoinColumn(name = "institution_id")
     private Institution institution;
+
+    /**
+     * AI generated summary.
+     */
+    @Column(length = 1000)
+    private String summary;
 
     /**
      * Map coordinates.

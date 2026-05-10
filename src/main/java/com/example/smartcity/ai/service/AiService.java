@@ -3,6 +3,7 @@ package com.example.smartcity.ai.service;
 import com.example.smartcity.ai.dto.AiResponseDto;
 import com.example.smartcity.ai.mapper.AiMapper;
 import com.example.smartcity.client.ai.AiClient;
+import com.example.smartcity.report.dto.ReportCreateDto;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,7 +21,7 @@ public class AiService {
     /**
      * Sends data to AI and returns classification result.
      */
-    public AiResponseDto classify(String description) {
-        return aiClient.classify(AiMapper.toRequest(description));
+    public AiResponseDto classify(ReportCreateDto dto, String imagePath) {
+        return aiClient.classify(AiMapper.toRequest(dto, imagePath));
     }
 }

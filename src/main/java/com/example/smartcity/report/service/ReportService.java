@@ -52,19 +52,19 @@ public class ReportService {
     public Report create(ReportCreateDto dto)
             throws IOException {
 
+        // Save image locally
+        String imageUrl =
+                fileStorageService.save(dto.getImage());
+
         // AI classification
         AiResponseDto aiResponse =
-                aiService.classify(dto.getDescription());
+                aiService.classify(dto, imageUrl);
 
         // Institution lookup
         Institution institution =
                 institutionService.findByCategory(
-                        aiResponse.getCategory()
+                        aiResponse.category()
                 );
-
-        // Save image locally
-        String imageUrl =
-                fileStorageService.save(dto.getImage());
 
         // Create report
         Report report = new Report();
@@ -72,7 +72,7 @@ public class ReportService {
         report.setDescription(dto.getDescription());
 
         report.setCategory(
-                aiResponse.getCategory()
+                aiResponse.category()
         );
 
         report.setStatus(

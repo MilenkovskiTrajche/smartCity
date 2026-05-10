@@ -16,6 +16,8 @@ public class ReportCreateDto {
     @Size(min = 5, max = 2000)
     private String description;
 
+    private String category;
+
     /**
      * Map coordinates.
      */
