@@ -119,4 +119,24 @@ public class ReportService {
                         )
                 );
     }
+
+    /**
+     * Updates report status.
+     */
+    public Report updateStatus(
+            Long id,
+            ReportStatus newStatus
+    ) {
+
+        Report report = repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Report not found"
+                        )
+                );
+
+        report.setStatus(newStatus);
+
+        return repository.save(report);
+    }
 }

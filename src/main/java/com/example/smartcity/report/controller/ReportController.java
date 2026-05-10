@@ -2,6 +2,7 @@ package com.example.smartcity.report.controller;
 
 import com.example.smartcity.report.dto.ReportCreateDto;
 import com.example.smartcity.report.dto.ReportResponseDto;
+import com.example.smartcity.report.dto.ReportStatusUpdateDto;
 import com.example.smartcity.report.mapper.ReportMapper;
 import com.example.smartcity.report.service.ReportService;
 import jakarta.validation.Valid;
@@ -56,6 +57,21 @@ public class ReportController {
 
         return ReportMapper.toDto(
                 service.getById(id)
+        );
+    }
+
+    @PutMapping("/{id}/status")
+    public ReportResponseDto updateStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody
+            ReportStatusUpdateDto dto
+    ) {
+
+        return ReportMapper.toDto(
+                service.updateStatus(
+                        id,
+                        dto.getStatus()
+                )
         );
     }
 }
