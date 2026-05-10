@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 /**
  * Business logic for managing reports.
  */
+
 @Service
 public class ReportService {
 
@@ -28,26 +29,33 @@ public class ReportService {
         this.institutionService = institutionService;
     }
 
-    /**
-     * Creates report, classifies it, and assigns institution.
-     */
     public Report create(ReportCreateDto dto) {
 
-        // 1. AI classification
+        // 1. AI classification (Description -> Category & Priority)
         AiResponseDto aiResponse = aiService.classify(dto.getDescription());
 
-        // 2. Find institution
+        // 2. Find institution based on the AI-detected category
         Institution institution =
                 institutionService.findByCategory(aiResponse.getCategory());
 
-        // 3. Create report
+        // 3. Create report with all the "Smart City" fields
         Report report = new Report();
         report.setDescription(dto.getDescription());
+
+        // Data from AI
         report.setCategory(aiResponse.getCategory());
+        report.setPriority(aiResponse.getPriority()); // You added this to the model
+
+        // Data from Frontend DTO
+        report.setLatitude(dto.getLatitude());     // For the map pin
+        report.setLongitude(dto.getLongitude());   // For the map pin
+        report.setImageUrl(dto.getImageUrl());     // For the evidence photo
+
         report.setStatus(ReportStatus.ASSIGNED);
 
         if (institution != null) {
-            report.setInstitutionName(institution.name());
+            report.setInstitutionName(institution.getName());
+            report.setInstitutionId(institution.getId()); // Linking for later tracking
         }
 
         return repository.save(report);
