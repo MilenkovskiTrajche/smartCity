@@ -10,7 +10,18 @@ import lombok.Data;
 public class ReportResponseDto {
 
     private Long id;
+
     private String description;
+
     private String category;
+
     private ReportStatus status;
+
+    private Double latitude;
+
+    private Double longitude;
+
+    private String imageUrl;
+
+    private String institutionName;
 }

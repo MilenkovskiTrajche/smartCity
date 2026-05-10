@@ -9,7 +9,11 @@ import com.example.smartcity.report.dto.ReportCreateDto;
 import com.example.smartcity.report.model.Report;
 import com.example.smartcity.report.model.enums.ReportStatus;
 import com.example.smartcity.report.repository.ReportRepository;
+import com.example.smartcity.util.FileStorageService;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Business logic for managing reports.
@@ -18,42 +22,101 @@ import org.springframework.stereotype.Service;
 public class ReportService {
 
     private final ReportRepository repository;
+
     private final AiService aiService;
+
     private final InstitutionService institutionService;
+
     private final InstitutionClient institutionClient;
 
-    public ReportService(ReportRepository repository,
-                         AiService aiService,
-                         InstitutionService institutionService, InstitutionClient institutionClient) {
+    private final FileStorageService fileStorageService;
+
+    public ReportService(
+            ReportRepository repository,
+            AiService aiService,
+            InstitutionService institutionService,
+            InstitutionClient institutionClient,
+            FileStorageService fileStorageService
+    ) {
         this.repository = repository;
         this.aiService = aiService;
         this.institutionService = institutionService;
         this.institutionClient = institutionClient;
+        this.fileStorageService = fileStorageService;
     }
 
     /**
-     * Creates report, classifies it, and assigns institution.
+     * Creates report, classifies it,
+     * uploads image, and assigns institution.
      */
-    public Report create(ReportCreateDto dto) {
+    public Report create(ReportCreateDto dto)
+            throws IOException {
 
-        // 1. AI classification
-        AiResponseDto aiResponse = aiService.classify(dto.getDescription());
+        // AI classification
+        AiResponseDto aiResponse =
+                aiService.classify(dto.getDescription());
 
-        // 2. Find institution
+        // Institution lookup
         Institution institution =
-                institutionService.findByCategory(aiResponse.getCategory());
+                institutionService.findByCategory(
+                        aiResponse.getCategory()
+                );
 
-        // 3. Create report
+        // Save image locally
+        String imageUrl =
+                fileStorageService.save(dto.getImage());
+
+        // Create report
         Report report = new Report();
-        report.setDescription(dto.getDescription());
-        report.setCategory(aiResponse.getCategory());
-        report.setStatus(ReportStatus.ASSIGNED);
 
+        report.setDescription(dto.getDescription());
+
+        report.setCategory(
+                aiResponse.getCategory()
+        );
+
+        report.setStatus(
+                ReportStatus.ASSIGNED
+        );
+
+        report.setLatitude(dto.getLatitude());
+
+        report.setLongitude(dto.getLongitude());
+
+        report.setImageUrl(imageUrl);
+
+        // Assign institution
         if (institution != null) {
+
             report.setInstitution(institution);
-            institutionClient.sendReport(institution, report);
+
+            institutionClient.sendReport(
+                    institution,
+                    report
+            );
         }
 
+        // Save in database
         return repository.save(report);
+    }
+
+    /**
+     * Returns all reports.
+     */
+    public List<Report> getAll() {
+        return repository.findAll();
+    }
+
+    /**
+     * Returns report by id.
+     */
+    public Report getById(Long id) {
+
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Report not found"
+                        )
+                );
     }
 }

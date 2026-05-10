@@ -27,10 +27,15 @@ public class Report {
     @JoinColumn(name = "institution_id")
     private Institution institution;
 
-    // TODO:
-    // - location (lat, lng)
-    // - imageUrl
-    // - institutionId
+    /**
+     * Map coordinates.
+     */
+    private Double latitude;
 
-    // getters & setters
+    private Double longitude;
+
+    /**
+     * Relative image path.
+     */
+    private String imageUrl;
 }

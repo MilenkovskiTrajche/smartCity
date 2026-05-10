@@ -4,11 +4,11 @@ import com.example.smartcity.report.dto.ReportCreateDto;
 import com.example.smartcity.report.dto.ReportResponseDto;
 import com.example.smartcity.report.mapper.ReportMapper;
 import com.example.smartcity.report.service.ReportService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * REST endpoints for reports.
@@ -24,10 +24,38 @@ public class ReportController {
     }
 
     /**
-     * Create new report
+     * Create new report.
      */
     @PostMapping
-    public ReportResponseDto create(@Valid @RequestBody ReportCreateDto dto) {
-        return ReportMapper.toDto(service.create(dto));
+    public ReportResponseDto create(
+            @Valid @ModelAttribute ReportCreateDto dto) throws IOException {
+
+        return ReportMapper.toDto(
+                service.create(dto)
+        );
+    }
+
+    /**
+     * Returns all reports.
+     */
+    @GetMapping
+    public List<ReportResponseDto> getAll() {
+
+        return service.getAll()
+                .stream()
+                .map(ReportMapper::toDto)
+                .toList();
+    }
+
+    /**
+     * Returns report by id.
+     */
+    @GetMapping("/{id}")
+    public ReportResponseDto getById(
+            @PathVariable Long id) {
+
+        return ReportMapper.toDto(
+                service.getById(id)
+        );
     }
 }

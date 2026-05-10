@@ -9,11 +9,26 @@ import com.example.smartcity.report.model.Report;
 public class ReportMapper {
 
     public static ReportResponseDto toDto(Report report) {
-        ReportResponseDto dto = new ReportResponseDto();
+
+        ReportResponseDto dto =
+                new ReportResponseDto();
+
         dto.setId(report.getId());
         dto.setDescription(report.getDescription());
         dto.setCategory(report.getCategory());
         dto.setStatus(report.getStatus());
+
+        dto.setLatitude(report.getLatitude());
+        dto.setLongitude(report.getLongitude());
+
+        dto.setImageUrl(report.getImageUrl());
+
+        if (report.getInstitution() != null) {
+            dto.setInstitutionName(
+                    report.getInstitution().getName()
+            );
+        }
+
         return dto;
     }
 }
