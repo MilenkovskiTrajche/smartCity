@@ -15,4 +15,8 @@ public class AiResponseDto {
 
     private Double confidence; // optional
 
+    private String priority; // AI should decide if it's HIGH/MEDIUM/LOW
+
+    private String institution; // AI suggests who handles this (e.g., EVN)
+
 }

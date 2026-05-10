@@ -12,9 +12,11 @@ import java.util.List;
 public class InstitutionService {
 
     private final List<Institution> institutions = List.of(
-            new Institution(1L, "Water Supply", "water"),
-            new Institution(2L, "Electric Company", "electricity"),
-            new Institution(3L, "City Roads", "road")
+            new Institution(1L, "Vodovod i Kanalizacija", "voda"),
+            new Institution(2L, "EVN / ESM", "struja"),
+            new Institution(3L, "JP Ulici i Patista", "ulica"),
+            new Institution(4L, "JP Ulici i Patista", "dupka"),
+            new Institution(5L, "Komunalna Higiena", "otpad")
     );
 
     /**

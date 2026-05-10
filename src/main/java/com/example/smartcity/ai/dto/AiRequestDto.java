@@ -15,6 +15,15 @@ public class AiRequestDto {
 
     private String description;
 
-    // TODO: add image field (Multipart or base64)
+    private String imageUrl;
 
+    // Constructor for easy use in Service
+    public AiRequestDto(String description, String imageUrl) {
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
+
+    public AiRequestDto() {
+
+    }
 }
