@@ -2,6 +2,7 @@ package com.example.smartcity.report.service;
 
 import com.example.smartcity.ai.dto.AiResponseDto;
 import com.example.smartcity.ai.service.AiService;
+import com.example.smartcity.client.institution.InstitutionClient;
 import com.example.smartcity.institution.model.Institution;
 import com.example.smartcity.institution.service.InstitutionService;
 import com.example.smartcity.report.dto.ReportCreateDto;
@@ -19,13 +20,15 @@ public class ReportService {
     private final ReportRepository repository;
     private final AiService aiService;
     private final InstitutionService institutionService;
+    private final InstitutionClient institutionClient;
 
     public ReportService(ReportRepository repository,
                          AiService aiService,
-                         InstitutionService institutionService) {
+                         InstitutionService institutionService, InstitutionClient institutionClient) {
         this.repository = repository;
         this.aiService = aiService;
         this.institutionService = institutionService;
+        this.institutionClient = institutionClient;
     }
 
     /**
@@ -48,6 +51,7 @@ public class ReportService {
 
         if (institution != null) {
             report.setInstitutionName(institution.name());
+            institutionClient.sendReport(institution, report);
         }
 
         return repository.save(report);
