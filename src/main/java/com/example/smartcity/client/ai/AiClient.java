@@ -22,7 +22,7 @@ public class AiClient {
      */
     public AiResponseDto classify(AiRequestDto request) {
         return webClient.post()
-                .uri("/classify")
+                .uri("/analyze")
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(AiResponseDto.class)

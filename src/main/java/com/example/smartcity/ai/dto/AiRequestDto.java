@@ -7,6 +7,8 @@ public record AiRequestDto(
 
         String description,
 
+        String category,
+
         String imagePath
 
 ) {
