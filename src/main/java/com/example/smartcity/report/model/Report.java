@@ -1,5 +1,6 @@
 package com.example.smartcity.report.model;
 
+import com.example.smartcity.institution.model.Institution;
 import com.example.smartcity.report.model.enums.ReportStatus;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -22,7 +23,9 @@ public class Report {
     @Enumerated(EnumType.STRING)
     private ReportStatus status;
 
-    private String institutionName;
+    @ManyToOne
+    @JoinColumn(name = "institution_id")
+    private Institution institution;
 
     // TODO:
     // - location (lat, lng)

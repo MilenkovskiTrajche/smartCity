@@ -17,8 +17,8 @@ public class InstitutionClient {
     public void sendReport(Institution institution, Report report) {
 
         System.out.println("Sending report to institution:");
-        System.out.println("Institution: " + institution.name());
-        System.out.println("URL: " + institution.url());
+        System.out.println("Institution: " + institution.getName());
+        System.out.println("URL: " + institution.getUrl());
         System.out.println("Category: " + report.getCategory());
         System.out.println("Description: " + report.getDescription());
 

@@ -50,7 +50,7 @@ public class ReportService {
         report.setStatus(ReportStatus.ASSIGNED);
 
         if (institution != null) {
-            report.setInstitutionName(institution.name());
+            report.setInstitution(institution);
             institutionClient.sendReport(institution, report);
         }
 

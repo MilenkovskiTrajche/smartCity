@@ -1,19 +1,35 @@
 package com.example.smartcity.institution.model;
 
+import jakarta.persistence.*;
+import lombok.Data;
+
 /**
- * Represents an institution responsible for handling reports.
+ * Represents institution responsible for handling reports.
  */
-public record Institution(
+@Data
+@Entity
+public class Institution {
 
-        Long id,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        String name,
+    private String name;
 
-        String category,
+    /**
+     * Supported category:
+     * water, electricity, road...
+     */
+    private String category;
 
-        String description,
+    /**
+     * Institution responsibility description.
+     */
+    @Column(length = 1000)
+    private String description;
 
-        String url
-
-) {
+    /**
+     * Institution API endpoint.
+     */
+    private String url;
 }

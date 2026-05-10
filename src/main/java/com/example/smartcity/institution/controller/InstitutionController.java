@@ -2,13 +2,11 @@ package com.example.smartcity.institution.controller;
 
 import com.example.smartcity.institution.model.Institution;
 import com.example.smartcity.institution.service.InstitutionService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * REST endpoints for institutions.
- */
 @RestController
 @RequestMapping("/api/institutions")
 public class InstitutionController {
@@ -24,14 +22,21 @@ public class InstitutionController {
      */
     @GetMapping
     public List<Institution> getAll() {
-        return service.getAll();
+        return service.getAll()
+                .stream()
+                .toList();
     }
 
     /**
-     * Returns supported categories.
+     * Creates institution.
      */
-    @GetMapping("/categories")
-    public List<String> getCategories() {
-        return service.getCategories();
+    @PostMapping
+    public Institution create(@Valid @RequestBody Institution dto) {
+        return service.create(dto);
+    }
+
+    @PostMapping("/{id}")
+    public Institution delete(@PathVariable Long id) {
+        return service.delete(id);
     }
 }
