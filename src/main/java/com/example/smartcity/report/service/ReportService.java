@@ -7,6 +7,7 @@ import com.example.smartcity.institution.model.Institution;
 import com.example.smartcity.institution.service.InstitutionService;
 import com.example.smartcity.report.dto.ReportCreateDto;
 import com.example.smartcity.report.model.Report;
+import com.example.smartcity.report.model.enums.ReportCategory;
 import com.example.smartcity.report.model.enums.ReportStatus;
 import com.example.smartcity.report.repository.ReportRepository;
 import com.example.smartcity.util.FileStorageService;
@@ -56,45 +57,35 @@ public class ReportService {
         String imageUrl =
                 fileStorageService.save(dto.getImage());
 
-        // AI classification
-        AiResponseDto aiResponse =
-                aiService.classify(dto, imageUrl);
-
-        // Institution lookup
-        Institution institution =
-                institutionService.findByCategory(
-                        aiResponse.category()
-                );
-
         // Create report
         Report report = new Report();
 
-        report.setDescription(dto.getDescription());
+        // AI classification
+        AiResponseDto aiResponse =
+                aiService.classify(dto, imageUrl);
+        String aiCategory = aiResponse.category();
+        
+        // Institution lookup
+        Institution institution =
+                institutionService.findByCategory(
+                        ReportCategory.valueOf(aiCategory.toUpperCase())
+                );
 
-        report.setCategory(
-                aiResponse.category()
-        );
+        report.setDescription(aiResponse.summary());
 
-        report.setStatus(
-                ReportStatus.ASSIGNED
-        );
+        report.setCategory(institution.getCategory());
+        report.setStatus(ReportStatus.ASSIGNED);
 
         report.setLatitude(dto.getLatitude());
-
         report.setLongitude(dto.getLongitude());
-
         report.setImageUrl(imageUrl);
+        report.setSummary(aiResponse.summary());
 
-        // Assign institution
-        if (institution != null) {
-
-            report.setInstitution(institution);
-
-            institutionClient.sendReport(
-                    institution,
-                    report
-            );
-        }
+        report.setInstitution(institution);
+        institutionClient.sendReport(
+                institution,
+                report
+        );
 
         // Save in database
         return repository.save(report);

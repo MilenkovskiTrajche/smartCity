@@ -1,5 +1,6 @@
 package com.example.smartcity.util;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,8 +14,10 @@ import java.util.UUID;
 @Service
 public class FileStorageService {
 
+    @Value("${APP_BASE_URL}")
+    private String BASE_URL;
     private static final String UPLOAD_DIR =
-            "uploads/reports/";
+            System.getProperty("user.dir") + "/uploads/reports/";
 
     /**
      * Saves image locally and returns relative path.
@@ -45,7 +48,6 @@ public class FileStorageService {
                 filePath,
                 StandardCopyOption.REPLACE_EXISTING
         );
-
-        return "/uploads/reports/" + filename;
+        return BASE_URL + "/uploads/reports/" + filename;
     }
 }

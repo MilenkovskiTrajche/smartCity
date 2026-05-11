@@ -2,6 +2,7 @@ package com.example.smartcity.institution.service;
 
 import com.example.smartcity.institution.model.Institution;
 import com.example.smartcity.institution.repository.InstitutionRepository;
+import com.example.smartcity.report.model.enums.ReportCategory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class InstitutionService {
     /**
      * Finds institution by category.
      */
-    public Institution findByCategory(String category) {
+    public Institution findByCategory(ReportCategory category) {
 
         return repository.findByCategory(category)
                 .orElse(null);

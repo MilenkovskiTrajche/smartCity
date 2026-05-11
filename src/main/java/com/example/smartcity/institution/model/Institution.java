@@ -1,13 +1,18 @@
 package com.example.smartcity.institution.model;
 
+import com.example.smartcity.report.model.enums.ReportCategory;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Represents institution responsible for handling reports.
  */
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Institution {
 
     @Id
@@ -20,7 +25,8 @@ public class Institution {
      * Supported category:
      * water, electricity, road...
      */
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private ReportCategory category;
 
     /**
      * Institution responsibility description.

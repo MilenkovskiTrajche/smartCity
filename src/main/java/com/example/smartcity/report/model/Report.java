@@ -1,6 +1,7 @@
 package com.example.smartcity.report.model;
 
 import com.example.smartcity.institution.model.Institution;
+import com.example.smartcity.report.model.enums.ReportCategory;
 import com.example.smartcity.report.model.enums.ReportPriority;
 import com.example.smartcity.report.model.enums.ReportStatus;
 import jakarta.persistence.*;
@@ -19,7 +20,8 @@ public class Report {
 
     private String description;
 
-    private String category; // classified by AI
+    @Enumerated(EnumType.STRING)
+    private ReportCategory category; // classified by AI
 
     @Enumerated(EnumType.STRING)
     private ReportStatus status;

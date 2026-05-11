@@ -12,6 +12,6 @@ public class AiMapper {
      * Converts plain description into AI request DTO
      */
     public static AiRequestDto toRequest(ReportCreateDto report, String imagePath) {
-        return new AiRequestDto(report.getDescription(), report.getCategory(), imagePath);
+        return new AiRequestDto(report.getDescription(), report.getCategory().toString(), imagePath);
     }
 }

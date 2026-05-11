@@ -9,7 +9,7 @@ public record AiRequestDto(
 
         String category,
 
-        String imagePath
+        String imageUrl
 
 ) {
 }

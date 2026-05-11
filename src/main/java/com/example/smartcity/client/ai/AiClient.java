@@ -5,6 +5,8 @@ import com.example.smartcity.ai.dto.AiResponseDto;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Duration;
+
 /**
  * Responsible for communication with external AI service (Python).
  */
@@ -26,6 +28,15 @@ public class AiClient {
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(AiResponseDto.class)
+                .timeout(Duration.ofSeconds(5))
+                .onErrorReturn(new AiResponseDto(
+                        "unknown",
+                        "AI unavailable",
+                        "LOW",
+                        "general",
+                        0.0,
+                        false
+                ))
                 .block();
     }
 }
