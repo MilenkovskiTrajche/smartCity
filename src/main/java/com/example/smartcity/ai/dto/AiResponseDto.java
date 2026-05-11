@@ -11,8 +11,6 @@ public record AiResponseDto(
 
         String priority,
 
-        String general,
-
         Double confidence,
 
         Boolean categoryMatch

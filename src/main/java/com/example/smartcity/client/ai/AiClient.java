@@ -33,7 +33,6 @@ public class AiClient {
                         "unknown",
                         "AI unavailable",
                         "LOW",
-                        "general",
                         0.0,
                         false
                 ))

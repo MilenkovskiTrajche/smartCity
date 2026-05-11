@@ -8,6 +8,7 @@ import com.example.smartcity.institution.service.InstitutionService;
 import com.example.smartcity.report.dto.ReportCreateDto;
 import com.example.smartcity.report.model.Report;
 import com.example.smartcity.report.model.enums.ReportCategory;
+import com.example.smartcity.report.model.enums.ReportPriority;
 import com.example.smartcity.report.model.enums.ReportStatus;
 import com.example.smartcity.report.repository.ReportRepository;
 import com.example.smartcity.util.FileStorageService;
@@ -71,7 +72,7 @@ public class ReportService {
                         ReportCategory.valueOf(aiCategory.toUpperCase())
                 );
 
-        report.setDescription(aiResponse.summary());
+        report.setDescription(dto.getDescription());
 
         report.setCategory(institution.getCategory());
         report.setStatus(ReportStatus.ASSIGNED);
@@ -80,6 +81,7 @@ public class ReportService {
         report.setLongitude(dto.getLongitude());
         report.setImageUrl(imageUrl);
         report.setSummary(aiResponse.summary());
+        report.setPriority(ReportPriority.valueOf(aiResponse.priority().toUpperCase()));
 
         report.setInstitution(institution);
         institutionClient.sendReport(
