@@ -2,6 +2,8 @@ package com.example.smartcity.client.ai;
 
 import com.example.smartcity.ai.dto.AiRequestDto;
 import com.example.smartcity.ai.dto.AiResponseDto;
+import com.example.smartcity.ai.dto.ImageDescriptionRequest;
+import com.example.smartcity.ai.dto.ImageDescriptionResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -36,6 +38,19 @@ public class AiClient {
                         0.0,
                         false
                 ))
+                .block();
+    }
+
+    public String generateDescription(String imagePath) {
+
+        return webClient.post()
+                .uri("/generate-description")
+                .bodyValue(new ImageDescriptionRequest(imagePath))
+                .retrieve()
+                .bodyToMono(ImageDescriptionResponse.class)
+                .timeout(Duration.ofSeconds(10))
+                .map(ImageDescriptionResponse::description)
+                .onErrorReturn("Unable to generate AI description")
                 .block();
     }
 }

@@ -1,12 +1,15 @@
 package com.example.smartcity.report.controller;
 
+import com.example.smartcity.ai.service.AiService;
 import com.example.smartcity.report.dto.ReportCreateDto;
 import com.example.smartcity.report.dto.ReportResponseDto;
 import com.example.smartcity.report.dto.ReportStatusUpdateDto;
 import com.example.smartcity.report.mapper.ReportMapper;
 import com.example.smartcity.report.service.ReportService;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,9 +22,11 @@ import java.util.List;
 public class ReportController {
 
     private final ReportService service;
+    private final AiService aiService;
 
-    public ReportController(ReportService service) {
+    public ReportController(ReportService service, AiService aiService) {
         this.service = service;
+        this.aiService = aiService;
     }
 
     /**
@@ -73,5 +78,14 @@ public class ReportController {
                         dto.getStatus()
                 )
         );
+    }
+
+
+    @PostMapping(value = "/ai-description",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String generateDescription(
+            @RequestParam("image") MultipartFile image
+    ) throws IOException {
+        return aiService.generateDescription(image);
     }
 }
