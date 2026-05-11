@@ -5,6 +5,7 @@ import com.example.smartcity.report.dto.ReportCreateDto;
 import com.example.smartcity.report.dto.ReportResponseDto;
 import com.example.smartcity.report.dto.ReportStatusUpdateDto;
 import com.example.smartcity.report.mapper.ReportMapper;
+import com.example.smartcity.report.model.enums.ReportCategory;
 import com.example.smartcity.report.service.ReportService;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -87,5 +89,10 @@ public class ReportController {
             @RequestParam("image") MultipartFile image
     ) throws IOException {
         return aiService.generateDescription(image);
+    }
+
+    @GetMapping("/categories")
+    public List<String> getCategories() {
+        return Arrays.stream(ReportCategory.values()).map(ReportCategory::name).toList();
     }
 }

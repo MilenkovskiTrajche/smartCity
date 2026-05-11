@@ -14,7 +14,7 @@ public class ReportMapper {
                 new ReportResponseDto();
 
         dto.setId(report.getId());
-        dto.setDescription(report.getDescription());
+        dto.setDescription(report.getSummary());
         dto.setCategory(report.getCategory());
         dto.setStatus(report.getStatus());
 
