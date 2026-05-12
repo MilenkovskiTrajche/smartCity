@@ -3,7 +3,6 @@ package com.example.smartcity.report.controller;
 import com.example.smartcity.ai.service.AiService;
 import com.example.smartcity.report.dto.ReportCreateDto;
 import com.example.smartcity.report.dto.ReportResponseDto;
-import com.example.smartcity.report.dto.ReportStatusUpdateDto;
 import com.example.smartcity.report.mapper.ReportMapper;
 import com.example.smartcity.report.model.enums.ReportCategory;
 import com.example.smartcity.report.service.ReportService;
@@ -66,22 +65,6 @@ public class ReportController {
                 service.getById(id)
         );
     }
-
-    @PutMapping("/{id}/status")
-    public ReportResponseDto updateStatus(
-            @PathVariable Long id,
-            @Valid @RequestBody
-            ReportStatusUpdateDto dto
-    ) {
-
-        return ReportMapper.toDto(
-                service.updateStatus(
-                        id,
-                        dto.getStatus()
-                )
-        );
-    }
-
 
     @PostMapping(value = "/ai-description",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
