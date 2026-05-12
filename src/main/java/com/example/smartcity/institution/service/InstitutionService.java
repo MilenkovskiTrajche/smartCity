@@ -3,6 +3,7 @@ package com.example.smartcity.institution.service;
 import com.example.smartcity.institution.model.Institution;
 import com.example.smartcity.institution.repository.InstitutionRepository;
 import com.example.smartcity.report.model.enums.ReportCategory;
+import com.example.smartcity.report.repository.ReportRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.List;
 public class InstitutionService {
 
     private final InstitutionRepository repository;
+    private final ReportRepository reportRepository;
 
-    public InstitutionService(InstitutionRepository repository) {
+    public InstitutionService(InstitutionRepository repository, ReportRepository reportRepository) {
         this.repository = repository;
+        this.reportRepository = reportRepository;
     }
 
     /**
@@ -47,14 +50,30 @@ public class InstitutionService {
                 .orElse(null);
     }
 
-    public Institution delete(Long id) {
-        Institution institution = repository.findById(id).orElse(null);
+    public void delete(Long id) {
 
-        if (institution != null) {
-            repository.delete(institution);
-            return institution;
-        } else {
-            return null;
+        Institution institution = getById(id);
+
+        boolean hasReports = reportRepository.existsByInstitutionId(id);
+
+        if (hasReports) {
+            throw new RuntimeException("Cannot delete institution with reports");
         }
+
+        repository.delete(institution);
+    }
+
+    public Institution getById(Long id) {
+        return repository.findById(id).orElseThrow(
+                () -> new RuntimeException("Institution not found"));
+    }
+
+    public Institution update(Long id, Institution institutionDto) {
+        Institution institution = getById(id);
+        institution.setCategory(institutionDto.getCategory());
+        institution.setDescription(institutionDto.getDescription());
+        institution.setUrl(institutionDto.getUrl());
+        institution.setName(institutionDto.getName());
+        return repository.save(institution);
     }
 }

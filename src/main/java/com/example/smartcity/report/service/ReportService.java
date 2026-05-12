@@ -6,15 +6,18 @@ import com.example.smartcity.client.institution.InstitutionClient;
 import com.example.smartcity.institution.model.Institution;
 import com.example.smartcity.institution.service.InstitutionService;
 import com.example.smartcity.report.dto.ReportCreateDto;
+import com.example.smartcity.report.dto.ReportUpdateDto;
 import com.example.smartcity.report.model.Report;
 import com.example.smartcity.report.model.enums.ReportCategory;
 import com.example.smartcity.report.model.enums.ReportPriority;
 import com.example.smartcity.report.model.enums.ReportStatus;
 import com.example.smartcity.report.repository.ReportRepository;
 import com.example.smartcity.util.FileStorageService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -51,6 +54,7 @@ public class ReportService {
      * Creates report, classifies it,
      * uploads image, and assigns institution.
      */
+    @Transactional
     public Report create(ReportCreateDto dto)
             throws IOException {
 
@@ -65,12 +69,19 @@ public class ReportService {
         AiResponseDto aiResponse =
                 aiService.classify(dto, imageUrl);
         String aiCategory = aiResponse.category();
+
+        ReportCategory category;
+
+        try {
+            category = ReportCategory.valueOf(
+                    aiCategory.trim().toUpperCase()
+            );
+        } catch (IllegalArgumentException e) {
+            category = ReportCategory.OTHER;
+        }
         
         // Institution lookup
-        Institution institution =
-                institutionService.findByCategory(
-                        ReportCategory.valueOf(aiCategory.toUpperCase())
-                );
+        Institution institution = institutionService.findByCategory(category);
 
         report.setDescription(dto.getDescription());
 
@@ -81,7 +92,17 @@ public class ReportService {
         report.setLongitude(dto.getLongitude());
         report.setImageUrl(imageUrl);
         report.setSummary(aiResponse.summary());
-        report.setPriority(ReportPriority.valueOf(aiResponse.priority().toUpperCase()));
+
+        ReportPriority priority;
+
+        try {
+            priority = ReportPriority.valueOf(
+                    aiResponse.priority().toUpperCase()
+            );
+        } catch (IllegalArgumentException e) {
+            priority = ReportPriority.LOW;
+        }
+        report.setPriority(priority);
 
         report.setInstitution(institution);
         institutionClient.sendReport(
@@ -90,7 +111,14 @@ public class ReportService {
         );
 
         // Save in database
-        return repository.save(report);
+        Report saved = repository.save(report);
+
+        institutionClient.sendReport(
+                institution,
+                saved
+        );
+
+        return saved;
     }
 
     /**
@@ -121,17 +149,39 @@ public class ReportService {
             ReportStatus newStatus
     ) {
 
-        Report report = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Report not found"
-                        )
-                );
+        Report report = getById(id);
 
         report.setStatus(newStatus);
+
+        if (newStatus == ReportStatus.RESOLVED) {
+            report.setResolvedAt(LocalDateTime.now());
+        } else {
+            report.setResolvedAt(null);
+        }
 
         return repository.save(report);
     }
 
+    public Report update(
+            Long id,
+            ReportUpdateDto dto
+    ) {
 
+        Report report = getById(id);
+
+        report.setDescription(dto.getDescription());
+        report.setCategory(dto.getCategory());
+        report.setStatus(dto.getStatus());
+        report.setPriority(dto.getPriority());
+        report.setLatitude(dto.getLatitude());
+        report.setLongitude(dto.getLongitude());
+        report.setSummary(dto.getSummary());
+
+        return repository.save(report);
+    }
+
+    public void delete(Long id) {
+        Report report = getById(id);
+        repository.delete(report);
+    }
 }

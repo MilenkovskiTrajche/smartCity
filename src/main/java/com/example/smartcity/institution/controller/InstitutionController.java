@@ -2,7 +2,6 @@ package com.example.smartcity.institution.controller;
 
 import com.example.smartcity.institution.model.Institution;
 import com.example.smartcity.institution.service.InstitutionService;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,26 +16,15 @@ public class InstitutionController {
         this.service = service;
     }
 
-    /**
-     * Returns all institutions.
-     */
     @GetMapping
     public List<Institution> getAll() {
-        return service.getAll()
-                .stream()
-                .toList();
+        return service.getAll();
     }
 
-    /**
-     * Creates institution.
-     */
-    @PostMapping
-    public Institution create(@Valid @RequestBody Institution dto) {
-        return service.create(dto);
-    }
-
-    @PostMapping("/{id}")
-    public Institution delete(@PathVariable Long id) {
-        return service.delete(id);
+    @GetMapping("/{id}")
+    public Institution getById(
+            @PathVariable Long id
+    ) {
+        return service.getById(id);
     }
 }
