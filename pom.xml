@@ -89,13 +89,6 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
-        <!-- dotenv -->
-        <dependency>
-            <groupId>io.github.cdimascio</groupId>
-            <artifactId>dotenv-java</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-
         <!-- ONLY keep WebClient support (NO full WebFlux starter) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
