@@ -32,7 +32,7 @@ public class AiClient {
                 .bodyToMono(AiResponseDto.class)
                 .timeout(Duration.ofSeconds(5))
                 .onErrorReturn(new AiResponseDto(
-                        "unknown",
+                        "OTHER",
                         "AI unavailable",
                         "LOW",
                         0.0,

@@ -79,10 +79,10 @@ public class DataInitializer implements CommandLineRunner {
 
         repository.save(new Institution(
                 null,
-                "СВР Скопје (МВР) – traffic enforcement",
-                ReportCategory.TRAFFIC,
-                "Traffic accidents, Road control, Signals, congestion",
-                "https://mvr.gov.mk"
+                "ГРАД СКОПЈЕ",
+                ReportCategory.OTHER,
+                "останато",
+                "https://gradsk.mk"
         ));
     }
 }
