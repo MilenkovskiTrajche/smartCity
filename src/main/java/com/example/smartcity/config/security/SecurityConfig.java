@@ -32,6 +32,9 @@ public class SecurityConfig {
                                 "/v3/api-docs/**"
                         ).permitAll()
 
+                        .requestMatchers("/uploads/**")
+                        .permitAll()
+
                         // Admin endpoints
                         .requestMatchers("/api/admin/**")
                         .hasRole("ADMIN")
