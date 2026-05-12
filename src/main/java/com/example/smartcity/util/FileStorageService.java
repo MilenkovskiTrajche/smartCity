@@ -14,7 +14,7 @@ import java.util.UUID;
 @Service
 public class FileStorageService {
 
-    @Value("${APP_BASE_URL}")
+    @Value("${app.base.url}")
     private String BASE_URL;
     private static final String UPLOAD_DIR =
             System.getProperty("user.dir") + "/uploads/reports/";
