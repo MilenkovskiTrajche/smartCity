@@ -9,7 +9,7 @@ public class AiWebClientConfig {
 
     @Bean
     public WebClient aiWebClient(
-            @Value("${AI_BASE_URL}") String baseUrl
+            @Value("${ai.base.url}") String baseUrl
     ) {
         return WebClient.builder()
                 .baseUrl(baseUrl)
