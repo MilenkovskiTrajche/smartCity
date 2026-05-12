@@ -48,6 +48,12 @@ Before running the project:
 
 ---
 
+## 🏗️ Start Instructions
+1. run with dev profile for hot reload and development features:
+   ```bash
+   mvn spring-boot:run -Dspring-boot.run.profiles=dev 
+   ```
+
 ## 🐘 Database Setup
 
 ### 1. Create database
