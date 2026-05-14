@@ -6,6 +6,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * Response returned to client.
  */
@@ -29,4 +31,10 @@ public class ReportResponseDto {
     private String imageUrl;
 
     private String institutionName;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    private LocalDateTime resolvedAt;
 }

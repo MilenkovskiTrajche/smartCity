@@ -1,6 +1,7 @@
 package com.example.smartcity.ai.service;
 
 import com.example.smartcity.ai.dto.AiResponseDto;
+import com.example.smartcity.ai.dto.ImageDescriptionResponse;
 import com.example.smartcity.ai.mapper.AiMapper;
 import com.example.smartcity.client.ai.AiClient;
 import com.example.smartcity.report.dto.ReportCreateDto;
@@ -31,7 +32,7 @@ public class AiService {
         return aiClient.classify(AiMapper.toRequest(dto, imagePath));
     }
 
-    public String generateDescription(
+    public ImageDescriptionResponse generateDescription(
             MultipartFile image
     ) throws IOException {
         String imagePath = fileStorageService.save(image);

@@ -41,16 +41,18 @@ public class AiClient {
                 .block();
     }
 
-    public String generateDescription(String imagePath) {
+    public ImageDescriptionResponse generateDescription(String imagePath) {
 
         return webClient.post()
                 .uri("/generate-description")
                 .bodyValue(new ImageDescriptionRequest(imagePath))
                 .retrieve()
                 .bodyToMono(ImageDescriptionResponse.class)
-                .timeout(Duration.ofSeconds(10))
-                .map(ImageDescriptionResponse::description)
-                .onErrorReturn("Unable to generate AI description")
+                .timeout(Duration.ofSeconds(5))
+                .onErrorReturn(new ImageDescriptionResponse(
+                        "Unable to generate AI description",
+                        "OTHER"
+                ))
                 .block();
     }
 }
