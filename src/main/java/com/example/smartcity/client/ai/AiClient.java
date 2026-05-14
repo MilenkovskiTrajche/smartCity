@@ -31,13 +31,10 @@ public class AiClient {
                 .retrieve()
                 .bodyToMono(AiResponseDto.class)
                 .timeout(Duration.ofSeconds(5))
-                .onErrorReturn(new AiResponseDto(
-                        "OTHER",
-                        "AI unavailable",
-                        "LOW",
-                        0.0,
-                        false
-                ))
+                .doOnError(e -> {
+                    System.out.println("AI ERROR:");
+                    e.printStackTrace();
+                })
                 .block();
     }
 
@@ -49,10 +46,10 @@ public class AiClient {
                 .retrieve()
                 .bodyToMono(ImageDescriptionResponse.class)
                 .timeout(Duration.ofSeconds(5))
-                .onErrorReturn(new ImageDescriptionResponse(
-                        "Unable to generate AI description",
-                        "OTHER"
-                ))
+                .doOnError(e -> {
+                    System.out.println("AI ERROR:");
+                    e.printStackTrace();
+                })
                 .block();
     }
 }
