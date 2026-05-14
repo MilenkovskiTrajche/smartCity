@@ -30,9 +30,4 @@ COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 
 # Better JVM startup tuning
-ENTRYPOINT ["java",
-  "-XX:+UseG1GC",
-  "-XX:MaxRAMPercentage=75.0",
-  "-Dspring.profiles.active=prod",
-  "-jar",
-  "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
