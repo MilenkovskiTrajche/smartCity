@@ -1,5 +1,6 @@
 package com.example.smartcity.report.controller;
 
+import com.example.smartcity.ai.dto.ImageDescriptionResponse;
 import com.example.smartcity.ai.service.AiService;
 import com.example.smartcity.report.dto.ReportCreateDto;
 import com.example.smartcity.report.dto.ReportResponseDto;
@@ -68,7 +69,7 @@ public class ReportController {
 
     @PostMapping(value = "/ai-description",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String generateDescription(
+    public ImageDescriptionResponse generateDescription(
             @RequestParam("image") MultipartFile image
     ) throws IOException {
         return aiService.generateDescription(image);

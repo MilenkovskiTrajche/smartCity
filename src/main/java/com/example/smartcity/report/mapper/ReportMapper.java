@@ -29,6 +29,10 @@ public class ReportMapper {
             );
         }
 
+        dto.setCreatedAt(report.getCreatedAt());
+        dto.setUpdatedAt(report.getUpdatedAt());
+        dto.setResolvedAt(report.getResolvedAt());
+
         return dto;
     }
 }
