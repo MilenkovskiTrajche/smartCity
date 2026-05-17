@@ -30,7 +30,7 @@ public class AiClient {
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(AiResponseDto.class)
-                .timeout(Duration.ofSeconds(5))
+                .timeout(Duration.ofSeconds(30))
                 .doOnError(e -> {
                     System.out.println("AI ERROR:");
                     e.printStackTrace();
@@ -45,7 +45,7 @@ public class AiClient {
                 .bodyValue(new ImageDescriptionRequest(imagePath))
                 .retrieve()
                 .bodyToMono(ImageDescriptionResponse.class)
-                .timeout(Duration.ofSeconds(5))
+                .timeout(Duration.ofSeconds(30))
                 .doOnError(e -> {
                     System.out.println("AI ERROR:");
                     e.printStackTrace();
